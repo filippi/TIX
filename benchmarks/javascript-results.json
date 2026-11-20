@@ -1,0 +1,95 @@
+{
+  "environment": {
+    "node": "v25.2.1",
+    "platform": "darwin",
+    "machine": "arm64"
+  },
+  "parameters": {
+    "count": 1000000,
+    "repeats": 3,
+    "seed": 48,
+    "batch": 8192,
+    "source_level": 42,
+    "query_level": 23,
+    "bin_level": 27,
+    "bins": 1024,
+    "bin_seconds": 8192,
+    "start_utc": "2024-10-04T14:47:28Z",
+    "span_seconds": 8388608
+  },
+  "preparation": {
+    "generation_and_encoding_ms": 64.28462499999999,
+    "unix_ms_materialization_ms": 1.0642949999999587,
+    "tix48_validated_encoding_ms": 32.70317100000007,
+    "date_batch_creation_ms_per_pass": 61.25549699999982
+  },
+  "timings_ms": {
+    "count": {
+      "date": {
+        "median": 4.295619000000329,
+        "runs": [
+          4.582916999999938,
+          4.1404140000002485,
+          4.295619000000329
+        ]
+      },
+      "unix_ms": {
+        "median": 3.7832819999996445,
+        "runs": [
+          3.8856669999998417,
+          3.6441240000003745,
+          3.7832819999996445
+        ]
+      },
+      "tix48": {
+        "median": 0.5372109999996724,
+        "runs": [
+          1.071079999999995,
+          0.5338340000000414,
+          0.5372109999996724
+        ]
+      }
+    },
+    "grid": {
+      "date": {
+        "median": 1.9965019999999072,
+        "runs": [
+          2.2282479999999367,
+          1.9222479999998257,
+          1.9965019999999072
+        ]
+      },
+      "unix_ms": {
+        "median": 1.8155410000001098,
+        "runs": [
+          1.826284999999885,
+          1.7174630000000661,
+          1.8155410000001098
+        ]
+      },
+      "tix48": {
+        "median": 15.597752000000071,
+        "runs": [
+          16.96066699999983,
+          15.597752000000071,
+          15.307293000000186
+        ]
+      }
+    }
+  },
+  "correctness": {
+    "matched": 15433,
+    "observations": 1000000,
+    "occupied_bins": 1024,
+    "empty_bins": 0,
+    "value_sum": -685492,
+    "all_counts_and_sums_identical": true
+  },
+  "memory": {
+    "input_array_payload_bytes": 18000000,
+    "date_objects_per_batch_max": 8192,
+    "native_tix48_bytes_per_record": 6,
+    "uint64_tix48_bytes_per_record": 8,
+    "unix_int64_bytes_per_record": 8
+  }
+}

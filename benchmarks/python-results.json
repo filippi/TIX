@@ -1,0 +1,97 @@
+{
+  "environment": {
+    "python": "3.14.2",
+    "platform": "Darwin",
+    "machine": "arm64"
+  },
+  "parameters": {
+    "count": 1000000,
+    "repeats": 3,
+    "seed": 48,
+    "batch": 8192,
+    "source_level": 42,
+    "query_level": 23,
+    "bin_level": 27,
+    "bin_seconds": 8192.0,
+    "bins": 1024,
+    "start_utc": "2024-10-04T14:47:28Z",
+    "span_seconds": 8388608.0
+  },
+  "preparation": {
+    "generation_and_encoding_ms": 768.2347500231117,
+    "unix_ms_materialization_ms": 50.61883496819064,
+    "tix48_validated_encoding_ms": 367.67187307123095,
+    "datetime_batch_creation_ms_per_pass": 130.02574193524197
+  },
+  "timings_ms": {
+    "count": {
+      "datetime": {
+        "median": 25.422581296879798,
+        "runs": [
+          25.422581296879798,
+          25.46420303406194,
+          25.373582495376468
+        ]
+      },
+      "unix_ms": {
+        "median": 34.81321793515235,
+        "runs": [
+          34.81321793515235,
+          34.89571297541261,
+          34.63333495892584
+        ]
+      },
+      "tix48": {
+        "median": 36.67291172314435,
+        "runs": [
+          36.67291172314435,
+          37.05174382776022,
+          36.348074150737375
+        ]
+      }
+    },
+    "grid": {
+      "datetime": {
+        "median": 169.03824592009187,
+        "runs": [
+          169.3030098103918,
+          169.03824592009187,
+          168.56149706291035
+        ]
+      },
+      "unix_ms": {
+        "median": 118.8042476424016,
+        "runs": [
+          119.1456220112741,
+          118.49783291108906,
+          118.8042476424016
+        ]
+      },
+      "tix48": {
+        "median": 103.12228364637122,
+        "runs": [
+          103.38341491296887,
+          103.12228364637122,
+          103.03292371099815
+        ]
+      }
+    }
+  },
+  "correctness": {
+    "matched": 15433,
+    "observations": 1000000,
+    "occupied_bins": 1024,
+    "empty_bins": 0,
+    "value_sum": -685492,
+    "all_counts_and_sums_identical": true
+  },
+  "memory": {
+    "input_array_payload_bytes": 18000000,
+    "datetime_batch_object_bytes_approx": 458752,
+    "native_tix48_bytes_per_record": 6,
+    "uint64_tix48_bytes_per_record": 8,
+    "unix_int64_bytes_per_record": 8,
+    "note": "Array payloads exclude headers. The bounded datetime batch is an estimate; this is not peak RSS."
+  },
+  "methodology": "Prepared, unsorted inputs; no index. Median of full passes, summing bounded-batch kernel times. Identical records and bins. Setup/validation excluded and reported separately. No FFT is timed."
+}

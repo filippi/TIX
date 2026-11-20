@@ -18,8 +18,9 @@ A coarser time prefix is a grouping key. Masking finer bits and replacing the
 level header provides a parent without parsing dates or enumerating timestamps.
 This can make temporal filtering, MapReduce grouping and time bucketing for
 clustering much faster; performance depends on the workload and engine. TIX is
-not itself a clustering algorithm, and this repository makes no benchmark or
-scientific-validation claim.
+not itself a clustering algorithm. [Reproducible benchmarks](benchmarks/README.md)
+measure specific workloads; they make no universal speed or scientific-validation
+claim.
 
 ## Python: one file, no installation
 
@@ -102,6 +103,23 @@ Range covering is minimal, ordered and exact at the maximum level. At a coarser
 requested finest level, endpoints are **rounded outward**. Empty ranges yield no
 cells. See [SPEC.md](SPEC.md) for boundaries, canonical text and API conventions.
 
+## Run the benchmarks
+
+The [website](https://filippi.github.io/TIX/#benchmarks) compares period counting
+and preparing regular time-series bins using Date objects, Unix milliseconds and
+TIX48 prefixes. Run one million observations on demand, or use the smaller option.
+The worker keeps dataset allocation off the main page and supports cancellation.
+
+```sh
+python3 benchmarks/benchmark.py --count 1000000 --repeats 3
+node benchmarks/benchmark.js 1000000
+```
+
+[Methodology and measured Python/Node results](benchmarks/README.md) include
+preparation costs, exact-result checks, and native versus runtime storage sizes.
+Some kernels favor TIX; others favor ordinary timestamps. The grid benchmark
+prepares sums/counts for spectral analysis; it does not time or accelerate an FFT.
+
 ## Verify or serve locally
 
 ```sh
@@ -109,6 +127,8 @@ python3 -m unittest discover -s tests -v
 node tests/test_tix.js
 node tests/test_timeline.js
 node tests/test_ui.js
+node tests/test_benchmark.js
+node tests/test_benchmark_ui.js
 for bits in 32 48 58 64; do
   cc -std=c99 -Wall -Wextra -Werror -pedantic -DTIX_BITS=$bits -I. tests/test_tix.c -o /tmp/test_tix$bits
   /tmp/test_tix$bits
