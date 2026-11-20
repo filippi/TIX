@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="TIX: a dyadic hierarchical temporal primitive. Explore exact intervals, prefix grouping, and a browser-local decoder. TIX48 by default.">
+<meta name="description" content="TIX: a dyadic hierarchical temporal primitive. Explore exact intervals, prefix grouping, and a live dyadic timeline. TIX48 by default.">
 <meta name="theme-color" content="#101916">
 <title>TIX — time, at every scale</title>
 <link rel="stylesheet" href="style.css">
 <script src="tix.js" defer></script>
+<script src="timeline.js" defer></script>
 <script src="sources.js" defer></script>
 <script src="app.js" defer></script>
 </head>
@@ -18,61 +19,42 @@
 </header>
 <main>
 <section class="hero wrap">
-<div class="hero-copy"><p class="eyebrow">TEMPORAL INTERVAL INDEX</p>
-<h1>Time has<br>many scales.<br><em>One hierarchy.</em></h1>
-<p class="intro">From fractions of a second to thousands of years. TIX represents a time interval as one integer, with its resolution built in.</p>
-<div class="hero-actions"><a class="button primary" href="#decoder">Explore an interval</a><a class="text-link" href="https://github.com/filippi/TIX/blob/main/SPEC.md">Read the specification</a></div>
-<p class="micro">Open reference · MIT license · No dependencies</p></div>
-<div class="time-art" role="img" aria-label="An interval splits into two children at every level. Level 40 is exactly one second; level 42 is a quarter-second.">
-<div class="art-top"><span>ONE INTERVAL. MANY RESOLUTIONS.</span><span>[&nbsp; ,&nbsp; )</span></div>
-<div class="tree-row r0"><span>the entire domain</span><b>L0</b></div>
-<div class="tree-row r1"><span></span><span class="active"></span><b>…</b></div>
-<div class="tree-row r2"><span></span><span class="active">256 seconds</span><span></span><b>L32</b></div>
-<div class="tree-row r3"><span></span><span></span><span class="active">1 second</span><span></span><b>L40</b></div>
-<div class="tree-row r4"><span></span><span></span><span class="active">½ s</span><span></span><span></span><b>L41</b></div>
-<div class="tree-row r5"><span></span><span></span><span></span><span class="active">¼ s</span><span></span><span></span><b>L42</b></div>
-<div class="art-bottom"><span>COARSE</span><div></div><span>FINE</span></div>
-<p class="art-caption">Each split halves the duration.<br>The highlighted cells follow one branch; spacing is schematic.</p>
-</div>
+<div><p class="eyebrow">TEMPORAL INTERVAL INDEX</p><h1>Time, <em>at every scale.</em></h1></div>
+<div class="hero-copy"><p class="intro">One interval. One integer. Click through time and see how every level splits it in two.</p><a class="text-link" href="https://github.com/filippi/TIX/blob/main/SPEC.md">Read the specification</a></div>
 </section>
-<section class="principles wrap" aria-label="Key properties">
-<div><span class="metric">48 bits</span><p>The default footprint.<br>One level header. One time prefix.</p></div>
-<div><span class="metric">L40 = 1 second</span><p>A fixed, exact duration.<br>L41 = ½ second. L42 = ¼ second.</p></div>
-<div><span class="metric">Always an interval</span><p>Start included. End excluded.<br>Resolution is not observational accuracy.</p></div>
-</section>
-<section class="decoder-section" id="decoder">
-<div class="wrap"><div class="section-heading"><div><p class="eyebrow">THE INTERVAL EXPLORER</p><h2>A small code.<br>A precise interval.</h2></div><p>Decode, move to a parent, or split into children.<br>Everything runs in your browser.</p></div>
-<div class="decoder-shell">
+<section class="explorer wrap" id="decoder" aria-label="Interactive dyadic time explorer">
+<div class="explorer-top"><div><span class="eyebrow">ONE TIME AXIS · CONSECUTIVE LEVELS</span><p>Click an interval to bring it into focus.</p></div><button id="live-button" class="live-button" type="button" aria-pressed="true"><span class="live-dot" aria-hidden="true"></span><span id="live-label">Live time</span></button></div>
 <form id="decode-form" class="decode-form">
-<div class="field width-field"><label for="width">Format</label><select id="width"><option value="32">TIX32</option><option value="48" selected>TIX48 · default</option><option value="58">TIX58</option></select></div>
-<div class="field code-field"><label for="code-input">Native hexadecimal or standalone Base64url</label><input id="code-input" value="8201a262a000" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-hint error" required></div>
-<button class="button primary" type="submit">Decode</button>
-<p id="input-hint" class="input-hint">12 lowercase hex digits or 11 unpadded Base64url characters.</p>
+<div class="field width-field"><label for="width">Format</label><select id="width"><option value="32">TIX32</option><option value="48" selected>TIX48</option><option value="58">TIX58</option></select></div>
+<div class="field code-field"><label for="code-input">Go to an interval · hex or Base64url</label><input id="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-hint error" placeholder="Paste a TIX code" required></div>
+<button class="button primary" type="submit">Go</button>
 </form>
+<p id="input-hint" class="input-hint">TIX48 · 12 lowercase hex digits or 11 Base64url characters.</p>
 <p id="error" class="error" role="alert" hidden></p>
-<div id="result" aria-live="polite" aria-atomic="true">
-<div class="interval-head"><div><span class="eyebrow">DECODED INTERVAL</span><h3 id="duration"></h3></div><span class="level-badge" id="level-badge"></span></div>
-<div class="endpoints"><div><span class="endpoint-label">[ START · INCLUDED</span><strong id="start"></strong></div><div><span class="endpoint-label">END · EXCLUDED )</span><strong id="end"></strong></div></div>
-<div class="interval-line" aria-hidden="true"><span></span><i></i><span></span></div>
-<dl class="code-details"><div><dt>Integer code</dt><dd id="integer"></dd></div><div><dt>Hexadecimal</dt><dd id="hex"></dd></div><div><dt>Base64url · 8 bytes</dt><dd id="base64"></dd></div></dl>
-<div class="hierarchy"><button id="parent" class="interval-button" type="button"></button><div class="children"><button id="child-0" class="interval-button" type="button"></button><button id="child-1" class="interval-button" type="button"></button></div></div>
-<p class="explorer-note">Intervals are half-open <code>[start, end)</code>. Adjacent children share a boundary and never overlap.</p>
+<div class="timeline-heading"><span>COARSER</span><span id="clock" aria-label="Current UTC time"></span></div>
+<div class="timeline" id="timeline" role="group" aria-label="Dyadic intervals, from coarser to finer levels" aria-describedby="timeline-help">
+<div class="timeline-rows" id="timeline-rows"></div>
+<div class="timeline-overlay" aria-hidden="true"><div class="selected-window"></div><div class="time-cursor" id="time-cursor"><span>now</span></div></div>
 </div>
-<details class="encode-details"><summary>Encode a UTC date instead</summary><form id="encode-form"><div class="field"><label for="utc-input">UTC date and time</label><input type="datetime-local" id="utc-input" value="2025-08-10T14:09:04" step="0.001" required></div><div class="field"><label for="level-input">Level</label><input type="number" id="level-input" min="0" max="42" value="32" required></div><button type="submit" class="button secondary">Encode date</button><p class="input-hint">Interpreted as UTC. The date input has millisecond precision; finer intervals can be explored through their children.</p></form></details>
-</div>
-<div class="example-strip"><span>TRY AN EXAMPLE</span><button type="button" data-example="known">August 2025</button><button type="button" data-example="epoch">Unix epoch · 1 second</button><button type="button" data-example="negative">Before the epoch</button><button type="button" data-example="universe">Entire domain</button></div>
-</div></section>
+<div class="timeline-heading bottom"><span>FINER</span><span id="level-limit"></span></div>
+<div class="selection-heading"><span id="level-badge" class="level-badge"></span><strong id="duration"></strong></div>
+<p id="selection-status" class="sr-only" role="status"></p>
+<div class="selection-range"><div><span>[ START · INCLUDED</span><time id="start"></time></div><div><span>END · EXCLUDED )</span><time id="end"></time></div></div>
+<div class="representations"><div><span>HEX</span><code id="hex"></code></div><div><span>BASE64URL</span><code id="base64"></code></div></div>
+<p id="timeline-help" class="timeline-help">Every row uses the same time axis. Each finer level halves the cells. Dashed edges mean an interval continues beyond the view; hatched space is outside the supported time domain. Click a level label to focus its interval, or a cell to choose another. Keyboard: left/right for neighbors, up/down for levels.</p>
+</section>
+<section class="principles wrap" aria-label="Key properties"><div><span class="metric">L40 = 1 second</span><p>Always the same duration.<br>L41 = ½ second. L42 = ¼ second.</p></div><div><span class="metric">Always an interval</span><p>Start included. End excluded.<br>Resolution is not observational accuracy.</p></div><div><span class="metric">TIX48 by default</span><p>48 meaningful bits.<br>One level header. One time prefix.</p></div></section>
 <section class="grouping wrap" id="hierarchy"><div><p class="eyebrow">KEEP THE PREFIX. CHANGE THE SCALE.</p><h2>Fine detail.<br>Fast grouping.</h2><p>A timestamp is assigned to an interval at the level you choose. To group at a coarser level, mask the finer prefix bits and update the level header. No calendar parsing. No scan through individual seconds.</p><p>These integer keys can make temporal grouping and filtering much faster. Use a coarser prefix as a MapReduce key or a time bucket for clustering, while retaining finer intervals in your data.</p><p class="muted">This is an efficient grouping primitive, not a clustering algorithm. Actual speed depends on the workload, storage and execution engine; no benchmark claim is made here.</p></div>
 <div class="mask-panel"><span class="eyebrow">ONE MASK. A SHARED PARENT.</span><div class="binary-row"><span class="bit-header">level</span><span class="kept">shared time prefix</span><span class="discard">finer bits</span></div><div class="binary-row"><code>101010</code><code class="kept">1000 0011 0101</code><code class="discard">10 0110</code></div><div class="binary-row"><code>101010</code><code class="kept">1000 0011 0101</code><code class="discard">11 1010</code></div><div class="mask-rule">MASK FINER BITS · SET COARSER LEVEL</div><div class="binary-row output"><code>001100</code><code class="kept">1000 0011 0101</code><code>00 0000</code></div><p>Schematic TIX48 bit fragments. Grouping works at bit boundaries, including inside bytes.</p></div>
 </section>
 <section class="family wrap"><div><p class="eyebrow">TIX IS THE FAMILY</p><h2>Choose the footprint.<br>Keep the hierarchy.</h2></div><div><p>Six bits encode the level. The remaining bits hold a left-aligned time prefix. TIX48 is the default; TIX32 trades resolution for a smaller footprint, while TIX58 retains finer detail.</p><div class="table-scroll"><table><thead><tr><th>Format</th><th>Max level</th><th>Finest duration</th></tr></thead><tbody><tr><td>TIX32</td><td>26</td><td>16,384 seconds</td></tr><tr class="default-row"><td>TIX48 · default</td><td>42</td><td>0.25 seconds</td></tr><tr><td>TIX58</td><td>52</td><td>244.140625 microseconds</td></tr></tbody></table></div><p>All share the same 2<sup>40</sup>-second domain, centered on the Unix epoch. <strong>Level 40 is always exactly one second</strong> wherever the chosen width supports it. TIX32 stops at level 26.</p><p class="muted">Width is external metadata. A code must be decoded with its width; raw integers are not interchangeable across widths. Exact conversion needs a level supported by both formats.</p></div></section>
 <section class="code-section" id="code"><div class="wrap"><div class="section-heading"><div><p class="eyebrow">SMALL ENOUGH TO TAKE WITH YOU</p><h2>Copy. Paste. Use.</h2></div><p>Plain Python. Header-only C.<br>No package, build system or third-party dependency.</p></div>
-<div class="source-panel"><div class="source-toolbar"><div role="group" aria-label="Source language"><button type="button" id="python-tab" class="source-tab active" aria-pressed="true">Python</button><button type="button" id="c-tab" class="source-tab" aria-pressed="false">C · header only</button></div><button type="button" class="copy-button" id="copy-source">Copy Python</button></div><p id="source-hint">Complete tix.py. Core times use integer quarter-seconds by default. Use encode_seconds() for Unix seconds.</p><pre tabindex="0" aria-label="Complete implementation"><code id="source-code"></code></pre><p id="copy-status" role="status"></p></div>
-<p class="source-footer">Includes encode/decode, hierarchy, containment, overlap, range covering, hex and Base64url. C defaults to TIX48; define <code>TIX_BITS</code> before including the header for another width. Python takes <code>bits=48</code> by default.</p>
+<details class="source-disclosure"><summary>View and copy the Python or C implementation</summary><div class="source-panel"><div class="source-toolbar"><div role="group" aria-label="Source language"><button type="button" id="python-tab" class="source-tab active" aria-pressed="true">Python</button><button type="button" id="c-tab" class="source-tab" aria-pressed="false">C · header only</button></div><button type="button" class="copy-button" id="copy-source">Copy Python</button></div><p id="source-hint">Complete tix.py. Core times use integer quarter-seconds by default. Use encode_seconds() for Unix seconds.</p><pre tabindex="0" aria-label="Complete implementation"><code id="source-code"></code></pre><p id="copy-status" role="status"></p></div>
+</details><p class="source-footer">Includes encode/decode, hierarchy, containment, overlap, range covering, hex and Base64url. C defaults to TIX48; define <code>TIX_BITS</code> before including the header for another width. Python takes <code>bits=48</code> by default.</p>
 </div></section>
 <section class="notes wrap"><h2>Exact boundaries.<br>Honest precision.</h2><div><p>TIX encodes a temporal interval, not an instantaneous event. A fine interval describes resolution, not the accuracy of an observation. A coarser interval may better reflect what is actually known.</p><p>Time is POSIX/Unix time. Leap seconds have no separate representation. Out-of-domain dates, invalid levels and noncanonical codes are rejected, never clamped.</p><p>The reference range cover is exact at the finest supported level. At a requested coarser limit it rounds outward, so it can include time outside the requested range.</p><a class="text-link" href="https://github.com/filippi/TIX/blob/main/SPEC.md">Explore the full format and conventions</a></div></section>
 </main>
 <footer class="wrap"><div><a class="wordmark" href="#">TIX</a><p>A dyadic hierarchical temporal primitive.</p></div><div><p>Jean-Baptiste Filippi · <a href="https://www.cnrs.fr/">CNRS</a></p><a href="https://firecaster.org/">firecaster.org</a><span class="footer-separator">·</span><a href="https://github.com/filippi/TIX/blob/main/LICENSE">MIT license</a></div></footer>
-<noscript><p class="wrap">JavaScript is required for the decoder and copyable source panels. The <a href="https://github.com/filippi/TIX">repository</a> contains the complete source and specification.</p></noscript>
+<noscript><p class="wrap">JavaScript is required for the live timeline and copyable source panels. The <a href="https://github.com/filippi/TIX">repository</a> contains the complete source and specification.</p></noscript>
 </body>
 </html>

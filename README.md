@@ -6,7 +6,7 @@ TIX represents a half-open time interval `[start, end)` as one unsigned integer.
 A six-bit header gives its level; a left-aligned time prefix gives its position.
 Each finer level splits an interval into two equal children.
 
-**[Explore the decoder and copy the Python/C helpers](https://filippi.github.io/TIX/)** ·
+**[Explore the live timeline and copy the Python/C helpers](https://filippi.github.io/TIX/)** ·
 [Specification](SPEC.md) · [Agent instructions](SKILL.md)
 
 TIX48 is the default: 48 meaningful bits, with a quarter-second finest interval.
@@ -107,6 +107,7 @@ cells. See [SPEC.md](SPEC.md) for boundaries, canonical text and API conventions
 ```sh
 python3 -m unittest discover -s tests -v
 node tests/test_tix.js
+node tests/test_timeline.js
 node tests/test_ui.js
 for bits in 32 48 58 64; do
   cc -std=c99 -Wall -Wextra -Werror -pedantic -DTIX_BITS=$bits -I. tests/test_tix.c -o /tmp/test_tix$bits
@@ -121,6 +122,13 @@ invalid text, exact boundaries, hierarchy, containment, overlap and range covers
 Python additionally checks 1,000 deterministic range-cover cases.
 After changing a helper, run `python3 tests/sync_sources.py` to update the website's
 copyable source; a test prevents the website from drifting from the actual code.
+The live timeline starts at the current one-second cell (L40). It shows up to
+five consecutive coarser and five finer levels on a shared time axis. Click a
+cell or level label, or paste hex/Base64url to recenter and pause; Live time
+returns to the current time. The view stops at the chosen format’s actual level
+limits. Dashed cell edges indicate clipping; hatched areas are outside the
+domain. The source panels expand when needed.
+
 The static website needs no framework, build process or backend. GitHub Pages
 serves `main` → `/docs`.
 

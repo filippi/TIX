@@ -233,8 +233,12 @@ JavaScript uses `BigInt` for timestamps, codes, shifts and masks. Levels and
 widths are small integer Numbers. `decode()` returns `{level, start, end}` in
 native ticks. Errors throw. Browser UTC formatting displays exact native tick
 fractions and supports the entire TIX domain, including extended ISO years.
-The optional UTC date input accepts millisecond input precision; that input
-precision does not limit the decoder's exact hierarchy operations.
+The interactive timeline starts live at the current one-second cell (L40 for
+TIX48), displaying up to five consecutive levels on either side, clipped at the
+format’s level limits. Rows share one time axis. Cell selection or canonical
+hex/Base64url input pauses and recenters the view. The Live time control resumes
+the current-time view. The moving marker follows the local clock; this does not
+change interval resolution or imply observational accuracy.
 
 Python's numeric core covers the complete domain. `format_utc` is a separate
 convenience using datetime; dates outside years 1–9999 raise an explanatory
