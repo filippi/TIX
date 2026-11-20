@@ -107,6 +107,7 @@ cells. See [SPEC.md](SPEC.md) for boundaries, canonical text and API conventions
 ```sh
 python3 -m unittest discover -s tests -v
 node tests/test_tix.js
+node tests/test_ui.js
 for bits in 32 48 58 64; do
   cc -std=c99 -Wall -Wextra -Werror -pedantic -DTIX_BITS=$bits -I. tests/test_tix.c -o /tmp/test_tix$bits
   /tmp/test_tix$bits
