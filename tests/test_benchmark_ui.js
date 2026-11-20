@@ -12,7 +12,7 @@ class Element{
 }
 const elements={};
 for(const match of html.matchAll(/\bid="([^"]+)"/g))elements[match[1]]=new Element();
-assert.match(html,/<option value="1000000" selected>/);
+assert.match(html,/<option value="2000000" selected>/);
 elements['bench-size'].value='100000';
 const workers=[];
 class WorkerStub{
@@ -24,14 +24,15 @@ class WorkerStub{
 const context=vm.createContext({Worker:WorkerStub,document:{getElementById:id=>{assert(elements[id],id);return elements[id];},createElement:()=>new Element()}});
 context.window=context;
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../docs/benchmark-ui.js'),'utf8'),context);
-const e=elements,result=b.run(100000,3);
+const backend=b.createWasmBackend(fs.readFileSync(path.join(__dirname,'../docs/benchmark.wasm')),100000);
+const e=elements,result=b.run(100000,3,()=>{},{backend,targetMs:0});
 e['bench-run'].click();assert(e['bench-run'].disabled);assert(!e['bench-cancel'].hidden);
 assert.equal(workers[0].request.count,100000);
 workers[0].send({type:'progress',phase:'measure',repeat:2,repeats:3,completed:50000,total:100000});
 assert.match(e['bench-status'].textContent,/pass 2/);assert(e['bench-progress'].value>0.2);
 workers[0].send({type:'done',result});assert(workers[0].terminated);assert(!e['bench-run'].disabled);assert(!e['bench-results'].hidden);
 assert.match(e['bench-status'].textContent,/100,000 observations/);
-assert.equal(e['bench-count-rows'].children.length,3);assert.equal(e['bench-grid-rows'].children.length,3);
+assert.equal(e['bench-count-rows'].children.length,6);assert.equal(e['bench-grid-rows'].children.length,6);
 assert.equal(e['bench-packed'].textContent,'0.60 MB');assert.equal(e['bench-tix-memory'].textContent,'0.80 MB');
 assert.match(e['bench-setup'].textContent,/outside the timed kernels/);
 e['bench-run'].click();const cancelled=workers[1];e['bench-cancel'].click();assert(cancelled.terminated);assert(!e['bench-run'].disabled);

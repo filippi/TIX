@@ -103,16 +103,32 @@ Range covering is minimal, ordered and exact at the maximum level. At a coarser
 requested finest level, endpoints are **rounded outward**. Empty ranges yield no
 cells. See [SPEC.md](SPEC.md) for boundaries, canonical text and API conventions.
 
+## Interval compactness and other quantities
+
+An aligned dyadic interval carries position and duration in one TIX48: six packed
+bytes or eight bytes in a uint64 field, versus 16 bytes for two int64 start/duration
+fields. Arbitrary interval pairs can require several TIX cells, and Python object
+sizes differ from serialized payload sizes. The [benchmark notes](benchmarks/README.md)
+report both comparisons explicitly.
+
+The underlying hierarchy is a dyadic primitive for scalar ranges. An altitude,
+radiance or other scalar convention needs its own domain, origin, units,
+transform and resolution. This repository's implemented convention is POSIX time;
+see [SPEC.md](SPEC.md) for the distinction.
+
 ## Run the benchmarks
 
 The [website](https://filippi.github.io/TIX/#benchmarks) compares period counting
 and preparing regular time-series bins using Date objects, Unix milliseconds and
-TIX48 prefixes. Run one million observations on demand, or use the smaller option.
+TIX48 prefixes. Run up to two million observations on demand, or use a smaller option.
+The table compares warmed JavaScript (including a uint32-word TIX path) with
+C <code>-O3 -msimd128</code> WebAssembly kernels for both Unix and TIX. Processing
+uses prebuilt equivalent arrays; conversion and compilation are reported separately.
 The worker keeps dataset allocation off the main page and supports cancellation.
 
 ```sh
-python3 benchmarks/benchmark.py --count 1000000 --repeats 3
-node benchmarks/benchmark.js 1000000
+python3 benchmarks/benchmark.py --count 2000000 --repeats 3
+node benchmarks/benchmark.js 2000000
 ```
 
 [Methodology and measured Python/Node results](benchmarks/README.md) include

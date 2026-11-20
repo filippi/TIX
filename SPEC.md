@@ -249,3 +249,25 @@ calendar-library limits on encoding, hierarchy or range operations.
 [relationships](tests/operations.tsv) and [range covers](tests/ranges.tsv) are
 consumed by all three implementations. Native-tick columns are signed decimal
 integers and the width column is explicit.
+
+## General dyadic scalar primitive
+
+TIX uses a general dyadic hierarchy with a time-specific convention. For another
+bounded scalar quantity, explicitly define domain `[A,B)`, units, origin, any
+transform and the finest quantum. With prefix width P and canonical prefix s:
+
+```text
+start = A + s * (B-A) / 2**P
+ duration = (B-A) / 2**L
+end = start + duration
+```
+
+The level and prefix hierarchy can then describe altitude, radiance or other
+scalar ranges. For example, an explicitly chosen altitude domain `[-1024,7168)`
+metres has one-metre cells at level 13. Multiple values share a cell at the
+selected resolution; the code's meaning depends on its convention.
+
+This does not redefine TIX time or add an alternate scalar encoder to the
+reference API. Under the implemented time convention, `A=-2**39`, `B=2**39`
+seconds and L40 is exactly one second. Other quantities need separate explicit
+convention/quantity metadata, and codes must not be reinterpreted silently.

@@ -27,3 +27,11 @@ wire conventions and width conversion.
   false from error. Provision `TIX_COVER_CAPACITY` cells for range covers.
 - After helper changes run shared Python/C/JavaScript tests and
   `python3 tests/sync_sources.py`; verify the website's copyable code stays exact.
+
+The underlying hierarchy can describe scalar ranges beyond time, but these
+helpers implement the POSIX time convention. Altitude, radiance or other scalar
+codes need explicit bounds, origin, units, transforms and quantum metadata; do
+not silently reinterpret time codes. For compactness comparisons distinguish six
+packed TIX48 bytes from eight-byte runtime storage and from Python object size.
+A single TIX stores an aligned dyadic interval, not every arbitrary start/duration
+pair. Compare native prepared-data kernels separately from conversion costs.

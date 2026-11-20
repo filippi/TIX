@@ -1,0 +1,311 @@
+{
+  "environment": {
+    "node": "v25.2.1",
+    "platform": "darwin",
+    "machine": "arm64"
+  },
+  "parameters": {
+    "count": 2000000,
+    "repeats": 3,
+    "seed": 48,
+    "batch": 8192,
+    "date_batch": 65536,
+    "source_level": 42,
+    "query_level": 23,
+    "bin_level": 27,
+    "bins": 1024,
+    "bin_seconds": 8192,
+    "start_utc": "2024-10-04T14:47:28Z",
+    "span_seconds": 8388608
+  },
+  "preparation": {
+    "generation_and_encoding_ms": 127.66970899999998,
+    "unix_ms_materialization_ms": 2.3002890000003333,
+    "tix48_validated_encoding_ms": 65.2381299999999,
+    "wasm_compilation_and_instantiation_ms": 0.1842499999999987,
+    "date_batch_creation_ms_per_pass": 134.49150300000383
+  },
+  "timings_ms": {
+    "count": {
+      "date": {
+        "median": 16.563632631703566,
+        "runs": [
+          15.6367410868635,
+          16.563632631703566,
+          16.80193999538058
+        ]
+      },
+      "unix_ms": {
+        "median": 8.286733200000004,
+        "runs": [
+          8.286733200000004,
+          8.003791600000023,
+          9.49829179999997
+        ]
+      },
+      "tix48": {
+        "median": 1.6130783599999996,
+        "runs": [
+          1.6130783599999996,
+          1.5538117037036938,
+          1.6889739583333114
+        ]
+      },
+      "tix_words": {
+        "median": 1.715336043478255,
+        "runs": [
+          1.6935225833333334,
+          1.715336043478255,
+          1.725854166666674
+        ]
+      },
+      "wasm_unix": {
+        "median": 0.46747709890109695,
+        "runs": [
+          0.4733601888888883,
+          0.4671438764705887,
+          0.46747709890109695
+        ]
+      },
+      "wasm_tix": {
+        "median": 0.45484615384615346,
+        "runs": [
+          0.45484615384615346,
+          0.4484084175824137,
+          0.4573475274725282
+        ]
+      }
+    },
+    "grid": {
+      "date": {
+        "median": 3.9123259880899983,
+        "runs": [
+          3.9123259880899983,
+          3.8295099093122325,
+          3.940297323019164
+        ]
+      },
+      "unix_ms": {
+        "median": 3.589017416666666,
+        "runs": [
+          3.589017416666666,
+          3.578011363636361,
+          3.6259145999999873
+        ]
+      },
+      "tix48": {
+        "median": 31.798125,
+        "runs": [
+          31.798125,
+          31.6425835,
+          32.0512705000001
+        ]
+      },
+      "tix_words": {
+        "median": 3.9277651818181103,
+        "runs": [
+          3.463399333333328,
+          3.9729393636363386,
+          3.9277651818181103
+        ]
+      },
+      "wasm_unix": {
+        "median": 1.930255952380949,
+        "runs": [
+          1.915435523809522,
+          1.930255952380949,
+          1.9594781904761909
+        ]
+      },
+      "wasm_tix": {
+        "median": 1.1297353783783783,
+        "runs": [
+          1.1212409999999993,
+          1.139094367647063,
+          1.1297353783783783
+        ]
+      }
+    }
+  },
+  "measurement_windows": {
+    "date": {
+      "count": [],
+      "grid": []
+    },
+    "unix_ms": {
+      "count": [
+        {
+          "iterations": 5,
+          "window_ms": 41.43366600000002
+        },
+        {
+          "iterations": 5,
+          "window_ms": 40.01895800000011
+        },
+        {
+          "iterations": 5,
+          "window_ms": 47.49145899999985
+        }
+      ],
+      "grid": [
+        {
+          "iterations": 12,
+          "window_ms": 43.068208999999996
+        },
+        {
+          "iterations": 22,
+          "window_ms": 78.71624999999995
+        },
+        {
+          "iterations": 20,
+          "window_ms": 72.51829199999975
+        }
+      ]
+    },
+    "tix48": {
+      "count": [
+        {
+          "iterations": 25,
+          "window_ms": 40.32695899999999
+        },
+        {
+          "iterations": 27,
+          "window_ms": 41.95291599999973
+        },
+        {
+          "iterations": 24,
+          "window_ms": 40.535374999999476
+        }
+      ],
+      "grid": [
+        {
+          "iterations": 2,
+          "window_ms": 63.59625
+        },
+        {
+          "iterations": 2,
+          "window_ms": 63.285167
+        },
+        {
+          "iterations": 2,
+          "window_ms": 64.1025410000002
+        }
+      ]
+    },
+    "tix_words": {
+      "count": [
+        {
+          "iterations": 24,
+          "window_ms": 40.644542
+        },
+        {
+          "iterations": 46,
+          "window_ms": 78.90545799999973
+        },
+        {
+          "iterations": 24,
+          "window_ms": 41.420500000000175
+        }
+      ],
+      "grid": [
+        {
+          "iterations": 12,
+          "window_ms": 41.560791999999935
+        },
+        {
+          "iterations": 11,
+          "window_ms": 43.702332999999726
+        },
+        {
+          "iterations": 11,
+          "window_ms": 43.205416999999215
+        }
+      ]
+    },
+    "wasm_unix": {
+      "count": [
+        {
+          "iterations": 90,
+          "window_ms": 42.602416999999946
+        },
+        {
+          "iterations": 170,
+          "window_ms": 79.41445900000008
+        },
+        {
+          "iterations": 91,
+          "window_ms": 42.54041599999982
+        }
+      ],
+      "grid": [
+        {
+          "iterations": 42,
+          "window_ms": 80.44829199999992
+        },
+        {
+          "iterations": 21,
+          "window_ms": 40.53537499999993
+        },
+        {
+          "iterations": 21,
+          "window_ms": 41.14904200000001
+        }
+      ]
+    },
+    "wasm_tix": {
+      "count": [
+        {
+          "iterations": 91,
+          "window_ms": 41.39099999999996
+        },
+        {
+          "iterations": 91,
+          "window_ms": 40.805165999999645
+        },
+        {
+          "iterations": 91,
+          "window_ms": 41.618625000000065
+        }
+      ],
+      "grid": [
+        {
+          "iterations": 37,
+          "window_ms": 41.48591699999997
+        },
+        {
+          "iterations": 68,
+          "window_ms": 77.45841700000028
+        },
+        {
+          "iterations": 37,
+          "window_ms": 41.800208999999995
+        }
+      ]
+    }
+  },
+  "execution": {
+    "javascript": "Engine JIT, warmed",
+    "wasm": "C -O3 -msimd128; CPU WebAssembly",
+    "gpu": false,
+    "target_window_ms": 40,
+    "shared_input_buffers": true,
+    "date_baseline": "Calibrated chunks, different cache pattern"
+  },
+  "correctness": {
+    "matched": 31159,
+    "observations": 2000000,
+    "occupied_bins": 1024,
+    "empty_bins": 0,
+    "value_sum": -2351935,
+    "all_counts_and_sums_identical": true
+  },
+  "memory": {
+    "input_array_payload_bytes": 36000000,
+    "wasm_linear_memory_bytes": 37093376,
+    "wasm_memory_cap_bytes": 67108864,
+    "date_objects_per_batch_max": 65536,
+    "native_tix48_bytes_per_record": 6,
+    "uint64_tix48_bytes_per_record": 8,
+    "unix_int64_bytes_per_record": 8
+  }
+}

@@ -5,7 +5,7 @@ with TIX validation and query-mask compilation outside the inner loops.
 """
 import argparse
 from array import array
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import gc
 import json
 import math
@@ -98,8 +98,8 @@ def grid_tix(items, values, counts, sums):
 
 
 def run(count=1000000, repeats=3):
-    if not 1 <= count <= 1000000 or not 1 <= repeats <= 7:
-        raise ValueError('count must be 1..1000000 and repeats 1..7')
+    if not 1 <= count <= 2000000 or not 1 <= repeats <= 7:
+        raise ValueError('count must be 1..2000000 and repeats 1..7')
     timestamps, codes, values, setup = dataset(count)
     lo = datetime.fromtimestamp(QUERY_START/4, timezone.utc)
     hi = datetime.fromtimestamp(QUERY_END/4, timezone.utc)
@@ -168,6 +168,9 @@ def run(count=1000000, repeats=3):
                         'empty_bins':sum(c==0 for c in counts),'value_sum':sum(sums),'all_counts_and_sums_identical':True},
         'memory': {'input_array_payload_bytes': sum(len(a)*a.itemsize for a in (timestamps,codes,values)),
                    'datetime_batch_object_bytes_approx': BATCH*(sys.getsizeof(sample)+8),
+                   'datetime_plus_timedelta_object_bytes':sys.getsizeof(sample)+sys.getsizeof(timedelta(seconds=1)),
+                   'tix_python_int_object_bytes':sys.getsizeof(tix.encode(0,40)),
+                   'start_plus_duration_int64_payload_bytes':16,
                    'native_tix48_bytes_per_record':6,'uint64_tix48_bytes_per_record':8,'unix_int64_bytes_per_record':8,
                    'note':'Array payloads exclude headers. The bounded datetime batch is an estimate; this is not peak RSS.'},
         'methodology':'Prepared, unsorted inputs; no index. Median of full passes, summing bounded-batch kernel times. Identical records and bins. Setup/validation excluded and reported separately. No FFT is timed.'

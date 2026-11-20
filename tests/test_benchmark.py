@@ -38,7 +38,7 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(result['correctness']['observations'],1000)
         self.assertEqual(result['memory']['input_array_payload_bytes'],18000)
         self.assertGreater(result['correctness']['empty_bins'],0)
-        for args in ((0,1),(1000001,1),(100,0),(100,8)):
+        for args in ((0,1),(2000001,1),(100,0),(100,8)):
             with self.assertRaises(ValueError):b.run(*args)
 
 if __name__=='__main__':unittest.main()
